@@ -32,16 +32,16 @@ public interface WindowsLiveAuthenticatorPluginConfig extends Configuration {
     @Description("Secret key used for communication with windows-live")
     String getClientSecret();
 
-    @Description("URL to the WindowsLive authorization endpoint")
-    @DefaultURI("https://api.windows-live.com/oauth/authorize")
+    @Description("URL to the Windows Live authorization endpoint")
+    @DefaultURI("https://login.live.com/oauth20_authorize.srf")
     URI getAuthorizationEndpoint();
 
-    @Description("URL to the WindowsLive token endpoint")
-    @DefaultURI("https://api.windows-live.com/oauth/access_token")
+    @Description("URL to the Windows Live token endpoint")
+    @DefaultURI("https://login.live.com/oauth20_token.srf")
     URI getTokenEndpoint();
 
-    @Description("A space-separated list of scopes to request from WindowsLive")
-    @DefaultString("basic")
+    @Description("A space-separated list of scopes to request from Windows Live")
+    @DefaultString("wl.basic")
     String getScope();
 
     SessionManager getSessionManager();

@@ -52,7 +52,7 @@ public class WindowsLiveAuthenticatorRequestHandler implements AuthenticatorRequ
 
     @Override
     public Optional<AuthenticationResult> get(RequestModel requestModel, Response response) {
-        _logger.info("GET request received for authentication authentication");
+        _logger.info("GET request received for authentication");
 
         _oauthClient.setServiceProviderId(requestModel.getRequest());
         return requestAuthentication(response, ImmutableMap.of(PARAM_REDIRECT_URI, _oauthClient.getCallbackUrl()));

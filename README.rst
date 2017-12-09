@@ -13,22 +13,22 @@ Config
 +-------------------+--------------------------------------------------+-----------------------------+
 | Name              | Default                                          | Description                 |
 +===================+==================================================+=============================+
-| ``Client ID``     |                                                  | Windows Live app client id     |
+| ``Client ID``     |                                                  | Windows Live app client id  |
 |                   |                                                  |                             |
 +-------------------+--------------------------------------------------+-----------------------------+
-| ``Client Secret`` |                                                  | Windows Live app secret key    |
+| ``Client Secret`` |                                                  | Windows Live app secret key |
 |                   |                                                  |                             |
 +-------------------+--------------------------------------------------+-----------------------------+
-| ``Authorization`` | https://www.windows-live.com/oauth/v2/authorization | URL to the Windows Live        |
+| ``Authorization`` | https://login.live.com/oauth20_authorize.srf     | URL to the Windows Live     |
 | ``Endpoint``      |                                                  | authorization endpoint      |
 |                   |                                                  |                             |
 +-------------------+--------------------------------------------------+-----------------------------+
-| ``Token``         | https://www.windows-live.com/oauth/v2/accessToken   | URL to the Windows Live        |
-| ``Endpoint``      |                                                  | authorization endpoint      |
+| ``Token``         | https://login.live.com/oauth20_token.srf         | URL to the Windows Live     |
+| ``Endpoint``      |                                                  | token endpoint              |
 +-------------------+--------------------------------------------------+-----------------------------+
-| ``Scope``         |    ``basic``                                     | A space-separated list of   |
+| ``Scope``         |    ``wl.basic``                                  | A space-separated list of   |
 |                   |                                                  | scopes to request from      |
-|                   |                                                  | Windows Live                   |
+|                   |                                                  | Windows Live                |
 +-------------------+--------------------------------------------------+-----------------------------+
 
 Build plugin
@@ -63,7 +63,7 @@ Following jars must be in plugin group classpath.
 Please visit `curity.io`_ for more information about the Curity Identity
 Server.
 
-.. _Windows Live app: https://www.windows-live.com/developer/clients/manage
+.. _Windows Live app: https://apps.dev.microsoft.com
 .. _curity.io/plugins: https://support.curity.io/docs/latest/developer-guide/plugins/index.html#plugin-installation
 .. _commons-codec-1.9.jar: http://central.maven.org/maven2/commons-codec/commons-codec/1.9/commons-codec-1.9.jar
 .. _commons-logging-1.2.jar: http://central.maven.org/maven2/commons-logging/commons-logging/1.2/commons-logging-1.2.jar

@@ -72,10 +72,8 @@ public class CallbackRequestHandler
                 requestModel.getCode(),
                 requestModel.getState());
 
-        String userId = ((Map) tokenMap.get("user")).get("id").toString();
-
         AuthenticationAttributes attributes = AuthenticationAttributes.of(
-                SubjectAttributes.of(userId, Attributes.fromMap(tokenMap)),
+                SubjectAttributes.of( tokenMap.get("user_id").toString(), Attributes.fromMap(tokenMap)),
                 ContextAttributes.of(Attributes.of(Attribute.of(PARAM_ACCESS_TOKEN, tokenMap.get(PARAM_ACCESS_TOKEN).toString()))));
         AuthenticationResult authenticationResult = new AuthenticationResult(attributes);
         return Optional.ofNullable(authenticationResult);
