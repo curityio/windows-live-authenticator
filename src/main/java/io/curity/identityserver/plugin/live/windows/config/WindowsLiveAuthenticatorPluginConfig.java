@@ -17,33 +17,36 @@
 package io.curity.identityserver.plugin.live.windows.config;
 
 import se.curity.identityserver.sdk.config.Configuration;
-import se.curity.identityserver.sdk.config.annotation.DefaultString;
-import se.curity.identityserver.sdk.config.annotation.DefaultURI;
 import se.curity.identityserver.sdk.config.annotation.Description;
+import se.curity.identityserver.sdk.service.ExceptionFactory;
+import se.curity.identityserver.sdk.service.HttpClient;
+import se.curity.identityserver.sdk.service.Json;
 import se.curity.identityserver.sdk.service.SessionManager;
+import se.curity.identityserver.sdk.service.WebServiceClientFactory;
+import se.curity.identityserver.sdk.service.authentication.AuthenticatorInformationProvider;
 
-import java.net.URI;
+import java.util.Optional;
 
 @SuppressWarnings("InterfaceNeverImplemented")
-public interface WindowsLiveAuthenticatorPluginConfig extends Configuration {
-    @Description("client id")
+public interface WindowsLiveAuthenticatorPluginConfig extends Configuration
+{
+    @Description("Client ID")
     String getClientId();
 
-    @Description("Secret key used for communication with windows-live")
+    @Description("Client secret")
     String getClientSecret();
 
-    @Description("URL to the Windows Live authorization endpoint")
-    @DefaultURI("https://login.live.com/oauth20_authorize.srf")
-    URI getAuthorizationEndpoint();
-
-    @Description("URL to the Windows Live token endpoint")
-    @DefaultURI("https://login.live.com/oauth20_token.srf")
-    URI getTokenEndpoint();
-
-    @Description("A space-separated list of scopes to request from Windows Live")
-    @DefaultString("wl.basic")
-    String getScope();
+    @Description("The HTTP client with any proxy and TLS settings that will be used to connect to slack")
+    Optional<HttpClient> getHttpClient();
 
     SessionManager getSessionManager();
+
+    ExceptionFactory getExceptionFactory();
+
+    AuthenticatorInformationProvider getAuthenticatorInformationProvider();
+
+    WebServiceClientFactory getWebServiceClientFactory();
+
+    Json getJson();
 
 }

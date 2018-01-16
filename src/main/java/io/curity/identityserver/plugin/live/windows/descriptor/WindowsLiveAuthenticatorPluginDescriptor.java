@@ -16,35 +16,41 @@
 
 package io.curity.identityserver.plugin.live.windows.descriptor;
 
-import com.google.common.collect.ImmutableMap;
 import io.curity.identityserver.plugin.live.windows.authentication.CallbackRequestHandler;
 import io.curity.identityserver.plugin.live.windows.authentication.WindowsLiveAuthenticatorRequestHandler;
 import io.curity.identityserver.plugin.live.windows.config.WindowsLiveAuthenticatorPluginConfig;
 import se.curity.identityserver.sdk.authentication.AuthenticatorRequestHandler;
 import se.curity.identityserver.sdk.plugin.descriptor.AuthenticatorPluginDescriptor;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class WindowsLiveAuthenticatorPluginDescriptor
-        implements AuthenticatorPluginDescriptor<WindowsLiveAuthenticatorPluginConfig> {
+        implements AuthenticatorPluginDescriptor<WindowsLiveAuthenticatorPluginConfig>
+{
     public final static String INDEX = "index";
     public final static String CALLBACK = "callback";
 
     @Override
-    public String getPluginImplementationType() {
+    public String getPluginImplementationType()
+    {
         return "windows-live";
     }
 
     @Override
-    public Class<? extends WindowsLiveAuthenticatorPluginConfig> getConfigurationType() {
+    public Class<? extends WindowsLiveAuthenticatorPluginConfig> getConfigurationType()
+    {
         return WindowsLiveAuthenticatorPluginConfig.class;
     }
 
     @Override
-    public Map<String, Class<? extends AuthenticatorRequestHandler<?>>> getAuthenticationRequestHandlerTypes() {
-        return ImmutableMap.of(
-                INDEX, WindowsLiveAuthenticatorRequestHandler.class,
-                CALLBACK, CallbackRequestHandler.class);
+    public Map<String, Class<? extends AuthenticatorRequestHandler<?>>> getAuthenticationRequestHandlerTypes()
+    {
+        Map<String, Class<? extends AuthenticatorRequestHandler<?>>> handlers = new LinkedHashMap<>(2);
+        handlers.put("index", WindowsLiveAuthenticatorRequestHandler.class);
+        handlers.put(CALLBACK, CallbackRequestHandler.class);
+        
+        return handlers;
     }
 
 }
