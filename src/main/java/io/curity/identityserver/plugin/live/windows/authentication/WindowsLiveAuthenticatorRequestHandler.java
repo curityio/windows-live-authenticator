@@ -76,8 +76,7 @@ public class WindowsLiveAuthenticatorRequestHandler implements AuthenticatorRequ
         queryStringArguments.put("state", Collections.singleton(state));
         queryStringArguments.put("response_type", Collections.singleton("code"));
 
-        scopes.add("wl.basic");
-
+        handleScopes(scopes);
         queryStringArguments.put("scope", Collections.singleton(String.join(" ", scopes)));
 
         _logger.debug("Redirecting to {} with query string arguments {}", AUTHORIZATION_ENDPOINT,
@@ -85,6 +84,89 @@ public class WindowsLiveAuthenticatorRequestHandler implements AuthenticatorRequ
 
         throw _exceptionFactory.redirectException(AUTHORIZATION_ENDPOINT,
                 RedirectStatusCode.MOVED_TEMPORARILY, queryStringArguments, false);
+    }
+
+    private void handleScopes(Set<String> scopes)
+    {
+        scopes.add("wl.basic");
+        if (_config.isOfflineAccount())
+        {
+            scopes.add("wl.offline_access");
+        }
+        if (_config.isSingleSignin())
+        {
+            scopes.add("wl.signin");
+        }
+        if (_config.isBirthdayInfo())
+        {
+            scopes.add("wl.birthday");
+        }
+        switch (_config.getCalendarsInfo())
+        {
+            case WRITE:
+                scopes.add("wl.calendars_update");
+            case READ:
+                scopes.add("wl.calendars");
+        }
+        if (_config.isContactsBirthday())
+        {
+            scopes.add("wl.contacts_birthday");
+        }
+        if (_config.isContactsCreate())
+        {
+            scopes.add("wl.contacts_create");
+        }
+        if (_config.isCalendarAndEvents())
+        {
+            scopes.add("wl.contacts_calendars");
+        }
+        if (_config.isContactsPhotos())
+        {
+            scopes.add("wl.contacts_photos");
+        }
+        if (_config.isContactsOneDrive())
+        {
+            scopes.add("wl.contacts_skydrive");
+        }
+        if (_config.isEmailsAccess())
+        {
+            scopes.add("wl.emails");
+        }
+        if (_config.isEventsCreate())
+        {
+            scopes.add("wl.events_create");
+        }
+        if (_config.isIMAP())
+        {
+            scopes.add("wl.imap");
+        }
+        if (_config.isPhoneNumbersAccess())
+        {
+            scopes.add("wl.phone_numbers");
+        }
+        if (_config.isPhotosAccess())
+        {
+            scopes.add("wl.photos");
+        }
+        if (_config.isPostalAddresses())
+        {
+            scopes.add("wl.postal_addresses");
+        }
+        switch (_config.getOneDriveAccess())
+        {
+            case WRITE:
+                scopes.add("wl.skydrive_update");
+            case READ:
+                scopes.add("wl.skydrive");
+        }
+        if (_config.isWorkProfileInfo())
+        {
+            scopes.add("wl.work_profile");
+        }
+        if (_config.isOneNoteAccess())
+        {
+            scopes.add("office.onenote_create");
+        }
     }
 
     private String createRedirectUri()
