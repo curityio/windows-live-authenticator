@@ -73,7 +73,8 @@ public class CallbackRequestHandler implements AuthenticatorRequestHandler<Callb
         if (request.isGetRequest())
         {
             return new CallbackGetRequestModel(request);
-        } else
+        }
+        else
         {
             throw _exceptionFactory.methodNotAllowed();
         }
@@ -93,17 +94,19 @@ public class CallbackRequestHandler implements AuthenticatorRequestHandler<Callb
 
         Map<String, Object> tokenResponseData = redeemCodeForTokens(requestModel);
 
-
         AuthenticationAttributes attributes = AuthenticationAttributes.of(
-                SubjectAttributes.of(tokenResponseData.get("user_id").toString(), Attributes.fromMap(tokenResponseData)),
-                ContextAttributes.of(Attributes.of(Attribute.of("linkedin_access_token", tokenResponseData.get("access_token").toString()))));
+                SubjectAttributes.of(tokenResponseData.get("user_id").toString(),
+                        Attributes.fromMap(tokenResponseData)),
+                ContextAttributes.of(Attributes.of(Attribute.of("linkedin_access_token",
+                        tokenResponseData.get("access_token").toString()))));
         AuthenticationResult authenticationResult = new AuthenticationResult(attributes);
-        return Optional.ofNullable(authenticationResult);
+
+        return Optional.of(authenticationResult);
     }
 
     private Map<String, Object> redeemCodeForTokens(CallbackGetRequestModel requestModel)
     {
-        HttpResponse tokenResponse = getWebServiceClient("login.live.com")
+        HttpResponse tokenResponse = getWebServiceClient()
                 .withPath("/oauth20_token.srf")
                 .request()
                 .contentType("application/x-www-form-urlencoded")
@@ -127,14 +130,16 @@ public class CallbackRequestHandler implements AuthenticatorRequestHandler<Callb
         return _json.fromJson(tokenResponse.body(HttpResponse.asString()));
     }
 
-    private WebServiceClient getWebServiceClient(String host)
+    private WebServiceClient getWebServiceClient()
     {
         Optional<HttpClient> httpClient = _config.getHttpClient();
+        String host = "login.live.com";
 
         if (httpClient.isPresent())
         {
             return _webServiceClientFactory.create(httpClient.get()).withHost(host);
-        } else
+        }
+        else
         {
             return _webServiceClientFactory.create(URI.create("https://" + host));
         }
@@ -146,19 +151,22 @@ public class CallbackRequestHandler implements AuthenticatorRequestHandler<Callb
         {
             if ("access_denied".equals(requestModel.getError()))
             {
-                _logger.debug("Got an error from WindowsLive: {} - {}", requestModel.getError(), requestModel.getErrorDescription());
+                _logger.debug("Got an error from WindowsLive: {} - {}", requestModel.getError(), requestModel
+                        .getErrorDescription());
 
                 throw _exceptionFactory.redirectException(
                         _authenticatorInformationProvider.getAuthenticationBaseUri().toASCIIString());
             }
 
-            _logger.warn("Got an error from WindowsLive: {} - {}", requestModel.getError(), requestModel.getErrorDescription());
+            _logger.warn("Got an error from WindowsLive: {} - {}", requestModel.getError(), requestModel
+                    .getErrorDescription());
 
             throw _exceptionFactory.externalServiceException("Login with WindowsLive failed");
         }
     }
 
-    private static Map<String, String> createPostData(String clientId, String clientSecret, String code, String callbackUri)
+    private static Map<String, String> createPostData(String clientId, String clientSecret, String code, String
+            callbackUri)
     {
         Map<String, String> data = new HashMap<>(5);
 
@@ -201,7 +209,8 @@ public class CallbackRequestHandler implements AuthenticatorRequestHandler<Callb
         try
         {
             return URLEncoder.encode(unencodedString, StandardCharsets.UTF_8.name());
-        } catch (UnsupportedEncodingException e)
+        }
+        catch (UnsupportedEncodingException e)
         {
             throw new RuntimeException("This server cannot support UTF-8!", e);
         }
@@ -214,7 +223,8 @@ public class CallbackRequestHandler implements AuthenticatorRequestHandler<Callb
         if (sessionAttribute != null && state.equals(sessionAttribute.getValueOfType(String.class)))
         {
             _logger.debug("State matches session");
-        } else
+        }
+        else
         {
             _logger.debug("State did not match session");
 
