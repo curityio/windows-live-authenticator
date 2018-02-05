@@ -9,7 +9,7 @@ This project provides an opens source Windows Live Authenticator plug-in for the
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-* Curity Identity Server 3.0.0 and `its system requirements <https://developer.curity.io/docs/latest/system-admin-guide/system-requirements.html>`_
+* Curity Identity Server 2.4.0 and `its system requirements <https://developer.curity.io/docs/latest/system-admin-guide/system-requirements.html>`_
 
 Requirements for Building from Source
 """""""""""""""""""""""""""""""""""""
@@ -87,7 +87,6 @@ Click on ``Delegated Permissions`` Add button in order to configure scopes as sh
     .. figure:: docs/images/windows-live-scopes.png
         :align: center
         :width: 500px
-
 
 It could be helpful to also enable additional scopes. Scopes are the Windows Live related rights or permissions that the app is requesting. If the final application (not Curity, but the downstream app) is going to perform actions using the Windows Live API, additional scopes probably should be enabled. Refer to the `Windows Live documentation on scopes <https://msdn.microsoft.com/en-us/library/hh243646.aspx>`_ for an explanation of those that can be enabled and what they allow.
 
