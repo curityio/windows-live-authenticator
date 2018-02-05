@@ -93,14 +93,17 @@ public class WindowsLiveAuthenticatorRequestHandler implements AuthenticatorRequ
         {
             scopes.add("wl.offline_access");
         }
+
         if (_config.isSingleSignin())
         {
             scopes.add("wl.signin");
         }
+
         if (_config.isBirthdayInfo())
         {
             scopes.add("wl.birthday");
         }
+
         switch (_config.getCalendarsInfo())
         {
             case WRITE:
@@ -108,50 +111,62 @@ public class WindowsLiveAuthenticatorRequestHandler implements AuthenticatorRequ
             case READ:
                 scopes.add("wl.calendars");
         }
+
         if (_config.isContactsBirthday())
         {
             scopes.add("wl.contacts_birthday");
         }
+
         if (_config.isContactsCreate())
         {
             scopes.add("wl.contacts_create");
         }
+
         if (_config.isCalendarAndEvents())
         {
             scopes.add("wl.contacts_calendars");
         }
+
         if (_config.isContactsPhotos())
         {
             scopes.add("wl.contacts_photos");
         }
+
         if (_config.isContactsOneDrive())
         {
             scopes.add("wl.contacts_skydrive");
         }
+
         if (_config.isEmailsAccess())
         {
             scopes.add("wl.emails");
         }
+
         if (_config.isEventsCreate())
         {
             scopes.add("wl.events_create");
         }
+
         if (_config.isIMAP())
         {
             scopes.add("wl.imap");
         }
+
         if (_config.isPhoneNumbersAccess())
         {
             scopes.add("wl.phone_numbers");
         }
+
         if (_config.isPhotosAccess())
         {
             scopes.add("wl.photos");
         }
+
         if (_config.isPostalAddresses())
         {
             scopes.add("wl.postal_addresses");
         }
+
         switch (_config.getOneDriveAccess())
         {
             case WRITE:
@@ -159,10 +174,12 @@ public class WindowsLiveAuthenticatorRequestHandler implements AuthenticatorRequ
             case READ:
                 scopes.add("wl.skydrive");
         }
+
         if (_config.isWorkProfileInfo())
         {
             scopes.add("wl.work_profile");
         }
+
         if (_config.isOneNoteAccess())
         {
             scopes.add("office.onenote_create");
@@ -176,7 +193,8 @@ public class WindowsLiveAuthenticatorRequestHandler implements AuthenticatorRequ
             URI authUri = _authenticatorInformationProvider.getFullyQualifiedAuthenticationUri();
 
             return new URL(authUri.toURL(), authUri.getPath() + "/" + CALLBACK).toString();
-        } catch (MalformedURLException e)
+        }
+        catch (MalformedURLException e)
         {
             throw _exceptionFactory.internalServerException(ErrorCode.INVALID_REDIRECT_URI,
                     "Could not create redirect URI");

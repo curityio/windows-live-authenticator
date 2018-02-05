@@ -38,15 +38,19 @@ public interface WindowsLiveAuthenticatorPluginConfig extends Configuration
     @Description("Client secret")
     String getClientSecret();
 
-    @Description("Request a scope (wl.offline_access) that gives the ability to read and update a user's info at any time. Without this scope, an app can access the user's info only while the user is signed in to Live Connect and is using your app.")
+    @Description("Request a scope (wl.offline_access) that gives the ability to read and update a user's info at any " +
+            "time. Without this scope, an app can access the user's info only while the user is signed in to Live " +
+            "Connect and is using your app.")
     @DefaultBoolean(false)
     boolean isOfflineAccount();
 
-    @Description("Request a scope (wl.signin), with single sign-in, users who are already signed in to Live Connect are also signed in to your website.")
+    @Description("Request a scope (wl.signin), with single sign-in, users who are already signed in to Live Connect " +
+            "are also signed in to your website.")
     @DefaultBoolean(false)
     boolean isSingleSignin();
 
-    @Description("Request a scope (wl.birthday) that grants read access to a user's birthday info including birth day, month, and year.")
+    @Description("Request a scope (wl.birthday) that grants read access to a user's birthday info including birth " +
+            "day, month, and year.")
     @DefaultBoolean(false)
     boolean isBirthdayInfo();
 
@@ -59,39 +63,51 @@ public interface WindowsLiveAuthenticatorPluginConfig extends Configuration
     @DefaultEnum("NONE")
     Access getCalendarsInfo();
 
-    @Description("Request a scope (wl.contacts_birthday) that grants read access to the birth day and birth month of a user's contacts. Note that this also gives read access to the user's birth day, birth month, and birth year.")
+    @Description("Request a scope (wl.contacts_birthday) that grants read access to the birth day and birth month of " +
+            "a user's contacts. Note that this also gives read access to the user's birth day, birth month, and birth" +
+            " year.")
     @DefaultBoolean(false)
     boolean isContactsBirthday();
 
-    @Description("Request a scope (wl.contacts_create) that grants access to create new contacts in the user's address book.")
+    @Description("Request a scope (wl.contacts_create) that grants access to create new contacts in the user's " +
+            "address book.")
     @DefaultBoolean(false)
     boolean isContactsCreate();
 
-    @Description("Request a scope (wl.contacts_calendars) that grants read access to a user's calendars and events. Also enables read access to any calendars and events that other users have shared with the user.")
+    @Description("Request a scope (wl.contacts_calendars) that grants read access to a user's calendars and events. " +
+            "Also enables read access to any calendars and events that other users have shared with the user.")
     @DefaultBoolean(false)
     boolean isCalendarAndEvents();
 
-    @Description("Request a scope (wl.contacts_photos) that grants read access to a user's albums, photos, videos, and audio, and their associated comments and tags. Also enables read access to any albums, photos, videos, and audio that other users have shared with the user.")
+    @Description("Request a scope (wl.contacts_photos) that grants read access to a user's albums, photos, videos, " +
+            "and audio, and their associated comments and tags. Also enables read access to any albums, photos, " +
+            "videos, and audio that other users have shared with the user.")
     @DefaultBoolean(false)
     boolean isContactsPhotos();
 
-    @Description("Request a scope (wl.contacts_skydrive) that grants read access to Microsoft OneDrive files that other users have shared with the user. Note that this also gives read access to the user's files stored in OneDrive.")
+    @Description("Request a scope (wl.contacts_skydrive) that grants read access to Microsoft OneDrive files that " +
+            "other users have shared with the user. Note that this also gives read access to the user's files stored " +
+            "in OneDrive.")
     @DefaultBoolean(false)
     boolean isContactsOneDrive();
 
-    @Description("Request a scope (wl.emails) that grants read access to a user's personal, preferred, and business email addresses.")
+    @Description("Request a scope (wl.emails) that grants read access to a user's personal, preferred, and business " +
+            "email addresses.")
     @DefaultBoolean(false)
     boolean isEmailsAccess();
 
-    @Description("Request a scope (wl.events_create) that grants access to create events on the user's default calendar.")
+    @Description("Request a scope (wl.events_create) that grants access to create events on the user's default " +
+            "calendar.")
     @DefaultBoolean(false)
     boolean isEventsCreate();
 
-    @Description("Request a scope (wl.imap) that grants read and write access to a user's email using IMAP, and send access using SMTP.")
+    @Description("Request a scope (wl.imap) that grants read and write access to a user's email using IMAP, and send " +
+            "access using SMTP.")
     @DefaultBoolean(false)
     boolean isIMAP();
 
-    @Description("Request a scope (wl.phone_numbers) that grants read access to a user's personal, business, and mobile phone numbers.")
+    @Description("Request a scope (wl.phone_numbers) that grants read access to a user's personal, business, and " +
+            "mobile phone numbers.")
     @DefaultBoolean(false)
     boolean isPhoneNumbersAccess();
 
@@ -107,11 +123,13 @@ public interface WindowsLiveAuthenticatorPluginConfig extends Configuration
     @DefaultEnum("NONE")
     Access getOneDriveAccess();
 
-    @Description("Request a scope (wl.work_profile) that grants read access to a user's employer and work position information.")
+    @Description("Request a scope (wl.work_profile) that grants read access to a user's employer and work position " +
+            "information.")
     @DefaultBoolean(false)
     boolean isWorkProfileInfo();
 
-    @Description("Request a scope (office.onenote_create) that grants read and write access to a user's OneNote notebooks stored in OneDrive.")
+    @Description("Request a scope (office.onenote_create) that grants read and write access to a user's OneNote " +
+            "notebooks stored in OneDrive.")
     @DefaultBoolean(false)
     boolean isOneNoteAccess();
 
@@ -127,5 +145,4 @@ public interface WindowsLiveAuthenticatorPluginConfig extends Configuration
     WebServiceClientFactory getWebServiceClientFactory();
 
     Json getJson();
-
 }
