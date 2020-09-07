@@ -1,11 +1,11 @@
 Windows Live Authenticator Plug-in
 ==================================
    
-.. image:: https://curity.io/assets/images/badges/windows-live-authenticator-quality.svg
-       :target: https://curity.io/resources/code-examples/status/
-       
-.. image:: https://curity.io/assets/images/badges/windows-live-authenticator-availability.svg
-       :target: https://curity.io/resources/code-examples/status/
+.. image:: https://img.shields.io/badge/quality-demo-red
+    :target: https://curity.io/resources/code-examples/status/
+
+.. image:: https://img.shields.io/badge/availability-source-blue
+    :target: https://curity.io/resources/code-examples/status/
 
 This project provides an opens source Windows Live Authenticator plug-in for the Curity Identity Server. This allows an administrator to add functionality to Curity which will then enable end users to login using their Windows Live credentials. The app that integrates with Curity may also be configured to receive the Windows Live access token, allowing it to manage resources in Windows Live.
 
