@@ -22,16 +22,12 @@ import org.slf4j.LoggerFactory;
 import se.curity.identityserver.sdk.attribute.Attribute;
 import se.curity.identityserver.sdk.authentication.AuthenticationResult;
 import se.curity.identityserver.sdk.authentication.AuthenticatorRequestHandler;
-import se.curity.identityserver.sdk.errors.ErrorCode;
 import se.curity.identityserver.sdk.http.RedirectStatusCode;
 import se.curity.identityserver.sdk.service.ExceptionFactory;
 import se.curity.identityserver.sdk.service.authentication.AuthenticatorInformationProvider;
 import se.curity.identityserver.sdk.web.Request;
 import se.curity.identityserver.sdk.web.Response;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -41,12 +37,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-import static io.curity.identityserver.plugin.live.windows.descriptor.WindowsLiveAuthenticatorPluginDescriptor.CALLBACK;
+import static io.curity.identityserver.plugin.live.windows.authentication.RedirectUriUtils.createRedirectUri;
 
 public class WindowsLiveAuthenticatorRequestHandler implements AuthenticatorRequestHandler<Request>
 {
     private static final Logger _logger = LoggerFactory.getLogger(WindowsLiveAuthenticatorRequestHandler.class);
-    private static final String AUTHORIZATION_ENDPOINT = "https://login.live.com/oauth20_authorize.srf";
+    private static final String AUTHORIZATION_ENDPOINT = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize";
 
     private final WindowsLiveAuthenticatorPluginConfig _config;
     private final AuthenticatorInformationProvider _authenticatorInformationProvider;
@@ -64,7 +60,7 @@ public class WindowsLiveAuthenticatorRequestHandler implements AuthenticatorRequ
     {
         _logger.debug("GET request received for authentication");
 
-        String redirectUri = createRedirectUri();
+        String redirectUri = createRedirectUri(_authenticatorInformationProvider, _exceptionFactory);
         String state = UUID.randomUUID().toString();
         Map<String, Collection<String>> queryStringArguments = new LinkedHashMap<>(5);
         Set<String> scopes = new LinkedHashSet<>(7);
@@ -88,10 +84,10 @@ public class WindowsLiveAuthenticatorRequestHandler implements AuthenticatorRequ
 
     private void handleScopes(Set<String> scopes)
     {
-        scopes.add("wl.basic");
+        scopes.add("User.Read");
         if (_config.isOfflineAccount())
         {
-            scopes.add("wl.offline_access");
+            scopes.add("offline_access");
         }
 
         if (_config.isSingleSignin())
@@ -183,21 +179,6 @@ public class WindowsLiveAuthenticatorRequestHandler implements AuthenticatorRequ
         if (_config.isOneNoteAccess())
         {
             scopes.add("office.onenote_create");
-        }
-    }
-
-    private String createRedirectUri()
-    {
-        try
-        {
-            URI authUri = _authenticatorInformationProvider.getFullyQualifiedAuthenticationUri();
-
-            return new URL(authUri.toURL(), authUri.getPath() + "/" + CALLBACK).toString();
-        }
-        catch (MalformedURLException e)
-        {
-            throw _exceptionFactory.internalServerException(ErrorCode.INVALID_REDIRECT_URI,
-                    "Could not create redirect URI");
         }
     }
 

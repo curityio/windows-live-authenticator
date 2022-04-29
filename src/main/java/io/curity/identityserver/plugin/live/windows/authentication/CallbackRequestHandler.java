@@ -48,6 +48,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import static io.curity.identityserver.plugin.live.windows.authentication.RedirectUriUtils.createRedirectUri;
+
 public class CallbackRequestHandler implements AuthenticatorRequestHandler<CallbackGetRequestModel>
 {
     private final static Logger _logger = LoggerFactory.getLogger(CallbackRequestHandler.class);
@@ -93,12 +95,13 @@ public class CallbackRequestHandler implements AuthenticatorRequestHandler<Callb
         handleError(requestModel);
 
         Map<String, Object> tokenResponseData = redeemCodeForTokens(requestModel);
+        var accessToken = tokenResponseData.get("access_token").toString();
+        var userInfoResponse = getUserInfo(accessToken);
+        var subject = userInfoResponse.get("sub").toString();
 
         AuthenticationAttributes attributes = AuthenticationAttributes.of(
-                SubjectAttributes.of(tokenResponseData.get("user_id").toString(),
-                        Attributes.fromMap(tokenResponseData)),
-                ContextAttributes.of(Attributes.of(Attribute.of("linkedin_access_token",
-                        tokenResponseData.get("access_token").toString()))));
+                SubjectAttributes.of(subject, Attributes.fromMap(tokenResponseData)),
+                ContextAttributes.of(Attributes.of(Attribute.of("access_token", accessToken))));
         AuthenticationResult authenticationResult = new AuthenticationResult(attributes);
 
         return Optional.of(authenticationResult);
@@ -106,12 +109,14 @@ public class CallbackRequestHandler implements AuthenticatorRequestHandler<Callb
 
     private Map<String, Object> redeemCodeForTokens(CallbackGetRequestModel requestModel)
     {
-        HttpResponse tokenResponse = getWebServiceClient()
-                .withPath("/oauth20_token.srf")
+        var redirectUri = createRedirectUri(_authenticatorInformationProvider, _exceptionFactory);
+
+        HttpResponse tokenResponse = getLoginWebServiceClient()
+                .withPath("/common/oauth2/v2.0/token")
                 .request()
                 .contentType("application/x-www-form-urlencoded")
                 .body(getFormEncodedBodyFrom(createPostData(_config.getClientId(), _config.getClientSecret(),
-                        requestModel.getCode(), requestModel.getRequestUrl())))
+                        requestModel.getCode(), redirectUri)))
                 .method("POST")
                 .response();
         int statusCode = tokenResponse.statusCode();
@@ -130,10 +135,9 @@ public class CallbackRequestHandler implements AuthenticatorRequestHandler<Callb
         return _json.fromJson(tokenResponse.body(HttpResponse.asString()));
     }
 
-    private WebServiceClient getWebServiceClient()
+    private WebServiceClient getWebServiceClient(String host)
     {
         Optional<HttpClient> httpClient = _config.getHttpClient();
-        String host = "login.live.com";
 
         if (httpClient.isPresent())
         {
@@ -143,6 +147,14 @@ public class CallbackRequestHandler implements AuthenticatorRequestHandler<Callb
         {
             return _webServiceClientFactory.create(URI.create("https://" + host));
         }
+    }
+
+    private WebServiceClient getLoginWebServiceClient() {
+        return getWebServiceClient("login.microsoftonline.com");
+    }
+
+    private WebServiceClient getUserInfoWebServiceClient() {
+        return getWebServiceClient("graph.microsoft.com");
     }
 
     private void handleError(CallbackGetRequestModel requestModel)
@@ -230,5 +242,30 @@ public class CallbackRequestHandler implements AuthenticatorRequestHandler<Callb
 
             throw _exceptionFactory.badRequestException(ErrorCode.INVALID_SERVER_STATE, "Bad state provided");
         }
+    }
+
+    private Map<String, Object> getUserInfo(String accessToken)
+    {
+        HttpResponse tokenResponse = getUserInfoWebServiceClient()
+                .withPath("/oidc/userinfo")
+                .request()
+                .accept("application/json")
+                .header("Authorization", "Bearer " + accessToken)
+                .get()
+                .response();
+        int statusCode = tokenResponse.statusCode();
+
+        if (statusCode != 200)
+        {
+            if (_logger.isInfoEnabled())
+            {
+                _logger.info("Got error response from userinfo endpoint: error = {}, {}", statusCode,
+                        tokenResponse.body(HttpResponse.asString()));
+            }
+
+            throw _exceptionFactory.internalServerException(ErrorCode.EXTERNAL_SERVICE_ERROR);
+        }
+
+        return _json.fromJson(tokenResponse.body(HttpResponse.asString()));
     }
 }
