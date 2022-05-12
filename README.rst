@@ -12,13 +12,13 @@ This project provides an opens source Windows Live Authenticator plug-in for the
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-* Curity Identity Server 2.4.0 and `its system requirements <https://developer.curity.io/docs/latest/system-admin-guide/system-requirements.html>`_
+* Curity Identity Server 7.0.2 and `its system requirements <https://developer.curity.io/docs/latest/system-admin-guide/system-requirements.html>`_
 
 Requirements for Building from Source
 """""""""""""""""""""""""""""""""""""
 
 * Maven 3
-* Java JDK v. 8
+* Java SDK 17 or later
 
 Compiling the Plug-in from Source
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -39,32 +39,17 @@ For a more detailed explanation of installing plug-ins, refer to the `Curity dev
 Creating an App in Windows Live
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As `described in the Windows Live documentation <https://msdn.microsoft.com/en-us/library/hh243647.aspx>`_, you can `create apps <https://apps.dev.microsoft.com>`_ that use the Windows Live APIs as shown in the following figure:
+As `described in the Windows Live documentation <https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app>`_, you can `create apps <https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps/ApplicationsListBlade>`_ that use the Windows Live APIs as shown in the following figure:
 
-    .. figure:: docs/images/new-windows-live-app.png
+    .. figure:: docs/images/register-app.png
         :name: doc-new-windows-live-app
         :align: center
         :width: 500px
 
-    Then, give the app a name, e.g., ``Curity App``.
 
+Give the app a name, e.g., ``Curity App``. Choose which account types should the app support, then configure the redirect URI.
 
-After you click create, you will be able to see application configuration where you can find the ``Client ID (Application Id)``, to get ``Secret Key`` You need to ``Generate New Password``. These settings will be needed later when configuring the plug-in in Curity.
-
-    .. figure:: docs/images/new-windows-live-app1.png
-        :name: new-windows-live-app
-        :align: center
-        :width: 500px
-
-To configure the ``Redirect URLs`` you need to ``Add Platform`` as show in following figure and select ``Web`` from give options.
-
-    .. figure:: docs/images/new-windows-live-app2.png
-        :name: new-windows-live-app
-        :align: center
-        :width: 500px
-
-
-Windows Live will display the ``Callback URLs`` in the new platform's configuration. This needs to match the yet-to-be-created Windows Live authenticator instance in Curity. The default will not work, and, if used, will result in an error. This should be updated to some URL that follows the pattern ``$baseUrl/$authenticationEndpointPath/$windowsLiveAuthnticatorId/callback``, where each of these URI components has the following meaning:
+Select ``Web`` from the dropdown and fill the redirect URL. This needs to match the yet-to-be-created Windows Live authenticator instance in Curity. This should be set to some URL that follows the pattern ``$baseUrl/$authenticationEndpointPath/$windowsLiveAuthnticatorId/callback``, where each of these URI components has the following meaning:
 
 ============================== =========================================================================================
 URI Component                  Meaning
@@ -78,24 +63,21 @@ URI Component                  Meaning
 ``windowsLiveAuthenticatorId`` This is the name given to the Windows Live authenticator when defining it (e.g., ``windowsLive1``).
 ============================== =========================================================================================
 
-    .. figure:: docs/images/new-windows-live-app3.png
+You can then click **Register**, to create the app.
+
+Once the app is created, you will be able to see application configuration where you can find the ``Client ID (Application Id)``. To get ``Secret Key`` you need to click on ``Add a certificate or secret``, then ``New Client Secret``. Give the secret a name and a suitable expiration. These settings will be needed later when configuring the plug-in in Curity.
+
+    .. figure:: docs/images/create-secret.png
         :name: new-windows-live-app
         :align: center
         :width: 500px
 
 
-Once the Callback URL is updated, the only thing left is to configure scopes.
-Click on ``Delegated Permissions`` Add button in order to configure scopes as shown in below figure:
-
-    .. figure:: docs/images/windows-live-scopes.png
-        :align: center
-        :width: 500px
-
-It could be helpful to also enable additional scopes. Scopes are the Windows Live related rights or permissions that the app is requesting. If the final application (not Curity, but the downstream app) is going to perform actions using the Windows Live API, additional scopes probably should be enabled. Refer to the `Windows Live documentation on scopes <https://msdn.microsoft.com/en-us/library/hh243646.aspx>`_ for an explanation of those that can be enabled and what they allow.
+The only thing left is to configure scopes. Scopes are the Microsoft Identity Platform related rights or permissions that the app is requesting. If the final application (not Curity, but the downstream app) is going to perform actions using Microsoft APIs, additional scopes probably should be enabled. Refer to the `Active Directory documentation on scopes <https://docs.microsoft.com/en-gb/azure/active-directory/develop/v2-permissions-and-consent>`_ for an explanation of those that can be enabled and what they allow.
 
 .. warning::
 
-    If the app configuration in Windows Live does not allow a certain scope (e.g., the ``Offline Access`` scope) but that scope is enabled in the authenticator in Curity, a server error will result. For this reason, it is important to align these two configurations or not to define any when configuring the plug-in in Curity.
+    If the app configuration in Azure Portal does not allow a certain scope (e.g., the ``Offline Access`` scope) but that scope is enabled in the authenticator in Curity, a server error will result. For this reason, it is important to align these two configurations or not to define any when configuring the plug-in in Curity.
 
 Creating a Windows Live Authenticator in Curity
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
